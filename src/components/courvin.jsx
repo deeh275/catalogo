@@ -38,6 +38,8 @@ function CarrosselCourvin() {
     carrosselRef.current.scrollLeft = scrollLeft - walk;
   };
 
+  // funciona
+
 return (
   <div>
 
@@ -47,8 +49,8 @@ return (
 
     <div
       ref={carrosselRef}
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown }
+      onMouseLeave={handleMouseLeave }
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
       className="overflow-x-auto flex gap-4 p-4 cursor-grab active:cursor-grabbing select-none"
