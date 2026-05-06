@@ -41,7 +41,7 @@ function CarrosselCourvin() {
 return (
   <div>
 
-    <h1 className="text-3xl font-bold text-center mt-6">
+    <h1 className="text-3xl font-bold text-center mt-6" >
       Tecidos Courvin
     </h1>
 
