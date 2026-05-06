@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import Linho from "./components/Linho";
-import Veludo from "./components/Veludo";
-import Suede from "./components/Suede";
-import Courvin from "./components/Courvin";
+import Linho from "/src/components/Linho";
+import Veludo from "/src/components/Veludo";
+import Suede from "/src/components/Suede";
+import Courvin from "/src/components/Courvin";
 function App() {
 
 
