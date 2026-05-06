@@ -59,7 +59,7 @@ return (
           src={foto}
           draggable="false"
           className="w-48 h-48 object-cover rounded-xl"
-          alt="Courvinu"
+          alt="Courvin"
         />
       ))}
     </div>
