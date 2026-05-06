@@ -5,6 +5,8 @@ const fotos = [
   "/linho/linho2.jpg",
   "/linho/linho3.jpg",
   "/linho/linho4.jpg",
+  "/linho/linho5.jpg",
+  "/linho/linho6.jpg",
 ];
 
 function CarrosselLinho() {
@@ -36,7 +38,13 @@ function CarrosselLinho() {
     carrosselRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  return (
+return (
+  <div>
+
+    <h1 className="text-3xl font-bold text-center mt-6">
+      Tecidos Linho
+    </h1>
+
     <div
       ref={carrosselRef}
       onMouseDown={handleMouseDown}
@@ -55,7 +63,9 @@ function CarrosselLinho() {
         />
       ))}
     </div>
-  );
+
+  </div>
+);
 }
 
 export default CarrosselLinho;
