@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const fotos = [
   "/linho/linho1.jpg",
@@ -12,60 +12,107 @@ const fotos = [
 function CarrosselLinho() {
   const carrosselRef = useRef(null);
 
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
+  const [imagemCentral, setImagemCentral] = useState(0);
+
+  // ===== DRAG =====
   const handleMouseDown = (e) => {
-    isDown = true;
-    startX = e.pageX - carrosselRef.current.offsetLeft;
-    scrollLeft = carrosselRef.current.scrollLeft;
+    isDown.current = true;
+    startX.current = e.pageX - carrosselRef.current.offsetLeft;
+    scrollLeft.current = carrosselRef.current.scrollLeft;
   };
 
   const handleMouseLeave = () => {
-    isDown = false;
+    isDown.current = false;
   };
 
   const handleMouseUp = () => {
-    isDown = false;
+    isDown.current = false;
   };
 
   const handleMouseMove = (e) => {
-    if (!isDown) return;
+    if (!isDown.current) return;
+
     e.preventDefault();
+
     const x = e.pageX - carrosselRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5; // velocidade
-    carrosselRef.current.scrollLeft = scrollLeft - walk;
+    const walk = (x - startX.current) * 1.5;
+
+    carrosselRef.current.scrollLeft = scrollLeft.current - walk;
+
+    calcularCentral(); // atualiza em tempo real
   };
 
-return (
-  <div>
+  // ===== DETECTA IMAGEM NO CENTRO =====
+  const calcularCentral = () => {
+    const container = carrosselRef.current;
+    if (!container) return;
 
-    <h1 className="text-3xl font-bold text-center mt-6">
-      Tecidos Linho
-    </h1>
+    const containerRect = container.getBoundingClientRect();
+    const centro = containerRect.left + containerRect.width / 2;
 
-    <div
-      ref={carrosselRef}
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      className="overflow-x-auto flex gap-4 p-4 cursor-grab active:cursor-grabbing select-none"
-    >
-      {fotos.map((foto, i) => (
-        <img
-          key={i}
-          src={foto}
-          draggable="false"
-          className="w-48 h-48 object-cover rounded-xl"
-          alt="linho"
-        />
-      ))}
+    const imgs = container.querySelectorAll("img");
+
+    let menorDistancia = Infinity;
+    let indexCentral = 0;
+
+    imgs.forEach((img, i) => {
+      const rect = img.getBoundingClientRect();
+      const imgCentro = rect.left + rect.width / 2;
+
+      const distancia = Math.abs(imgCentro - centro);
+
+      if (distancia < menorDistancia) {
+        menorDistancia = distancia;
+        indexCentral = i;
+      }
+    });
+
+    setImagemCentral(indexCentral);
+  };
+
+  useEffect(() => {
+    calcularCentral();
+  }, []);
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-center mt-6">
+        Tecidos Linho
+      </h1>
+
+      <div
+        ref={carrosselRef}
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onScroll={calcularCentral}
+        className="overflow-x-auto flex gap-4 p-4 cursor-grab active:cursor-grabbing select-none"
+      >
+        {fotos.map((foto, i) => {
+          const ativo = i === imagemCentral;
+
+          return (
+            <img
+              key={i}
+              src={foto}
+              draggable="false"
+              alt="linho"
+              className={`object-cover rounded-xl transition-all duration-300 ${
+                ativo
+                  ? "w-56 h-56 scale-110 z-10"
+                  : "w-48 h-48 opacity-70 scale-95"
+              }`}
+            />
+          );
+        })}
+      </div>
     </div>
-
-  </div>
-);
+  );
 }
 
 export default CarrosselLinho;
